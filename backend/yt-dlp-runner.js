@@ -41,7 +41,7 @@ function runYtDlp(url, options = {}, onProgress = () => {}, onComplete = () => {
     const cookiesPath = path.join(__dirname, 'cookies.txt');
     if (fs.existsSync(cookiesPath)) {
       args.push('--cookies', cookiesPath);
-      try { console.log('[runner] cookies =', cookiesPath); } catch (e) {}
+      try { console.log('[runner] using cookies:', cookiesPath); } catch (e) {}
     }
   } catch (e) {
     try { console.warn('[runner] cookies detection error:', e.message); } catch (_) {}
