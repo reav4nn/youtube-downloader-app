@@ -62,7 +62,8 @@
                              "cookies_upload_endpoint":  true,
                              "health_route":  true,
                              "final_filename_detection":  true,
-                             "local_binaries":  true
+                             "local_binaries":  true,
+                             "google_sso": true
                          },
     "requirements":  {
                          "ffmpeg":  true,
@@ -74,7 +75,11 @@
                       "stream":  "/api/stream/:id",
                       "downloads":  "/api/downloads",
                       "files":  "/api/files",
-                      "file_static":  "/files/:filename"
+                      "file_static":  "/files/:filename",
+                      "auth_google": "/api/auth/google",
+                      "auth_callback": "/api/auth/google/callback",
+                      "auth_user": "/api/auth/user",
+                      "auth_logout": "/api/auth/logout"
                   },
     "workflow_preferences":  {
                                  "run_behavior":  {

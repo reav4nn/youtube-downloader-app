@@ -1,6 +1,6 @@
 # activeContext
 
-current_focus: Phase 2 integration work
+current_focus: Phase 3 – Auth & deployment
 - Real-time progress via SSE is implemented; frontend uses EventSource.
 - Link DB entries to actual downloaded files (filename/filepath) and expose listing.
 - Frontend shows visible progress state and auto-downloads file on completion.
@@ -33,6 +33,7 @@ recent_changes:
 - New route `GET /api/downloads` returns DB entries with `file_url` when available.
 - Added forced download endpoint `/files/download/:filename`; frontend now auto-triggers browser download when status becomes `completed`.
  - Updated yt-dlp format selection and added `--merge-output-format` (requires ffmpeg) to avoid corrupted/incomplete files.
+ - Implemented Google SSO with Passport.js + express-session. Routes: `/api/auth/google`, `/api/auth/google/callback`, `/api/auth/user`, `/api/auth/logout`. Sessions use SameSite=None; Secure in production with proxy trust; CORS updated for credentials; frontend header shows login, user avatar/name, and logout.
 
 next_steps:
 1. Add SSE hardening (heartbeat keepalive, ensure cleanup on disconnect).
@@ -52,7 +53,7 @@ design_assets:
 ---END DESIGN SNIPPET---
 
 notes:
-- Authentication (Google SSO) deferred until after UI is stable.
+- Authentication (Google SSO) implemented with Passport + sessions; frontend and backend configured for cross-origin credentials.
 - Photo upload and AI analysis / manual food entry mentioned by user in conversation: this appears to be from a different project; ignore for this project.
  - ffmpeg and ffprobe installed and on PATH (confirmed by user) for yt-dlp merging/conversion.
 

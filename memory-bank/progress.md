@@ -63,7 +63,7 @@ Recent updates:
 
 Phase 3 – Advanced & deployment:
 - Tasks:
-  - Implement Google SSO authentication
+  - [x] Implement Google SSO authentication
   - Add PWA features and offline caching
   - Implement exports, playlists, subtitles, bulk downloads
   - Documentation for self-hosting (nginx/reverse-proxy, systemd, Windows service)
@@ -78,4 +78,11 @@ notes:
  - Added detailed backend logging to diagnose Render spawn issues: logs download start, args, cwd, stdout/stderr, close code; verifies downloads dir writability.
 - YouTube cookies support: runner now auto-loads cookies from backend/cookies.txt when present, logs path, and ignores file in git.
  - Runner syntax fixed; consolidated stdout/stderr/close handling; logs binaries/args; detects final filename reliably and updates DB/API.
- - Added token-protected cookies upload route and runner auto-detects backend/cookies.txt (--cookies), enabling uploads without SSH on Render.
+- Added token-protected cookies upload route and runner auto-detects backend/cookies.txt (--cookies), enabling uploads without SSH on Render.
+
+Google SSO updates:
+- Implemented Google OAuth 2.0 via Passport.js and express-session.
+- Added routes: `/api/auth/google`, `/api/auth/google/callback`, `/api/auth/logout`, `/api/auth/user`.
+- Sessions: SameSite=None; Secure cookies in production with `trust proxy` set for Render.
+- CORS configured with credentials for Vercel frontend and localhost dev.
+- Frontend header displays login button, user name + avatar, and logout.

@@ -1,5 +1,8 @@
 const express = require('express');
 const cors = require('cors');
+const session = require('express-session');
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 const db = require('./db');
@@ -7,8 +10,71 @@ const { runYtDlp } = require('./yt-dlp-runner');
 const fs = require('fs');
 
 const app = express();
-app.use(cors());
+
+// Trust proxy for correct protocol when behind Render/other proxies
+app.set('trust proxy', 1);
+
+// CORS with credentials for frontend on Vercel and local dev
+const FRONTEND_ORIGIN = 'https://youtube-downloader.vercel.app';
+const allowedOrigins = new Set([
+  FRONTEND_ORIGIN,
+  'http://localhost:5173',
+  'http://127.0.0.1:5173'
+]);
+app.use(cors({
+  origin: (origin, cb) => {
+    if (!origin) return cb(null, true);
+    if (allowedOrigins.has(origin)) return cb(null, true);
+    return cb(new Error('Not allowed by CORS'));
+  },
+  credentials: true,
+}));
+
 app.use(express.json());
+
+// Sessions for Passport (Google OAuth)
+const prod = process.env.NODE_ENV === 'production';
+const sessionCookieConfig = {
+  httpOnly: true,
+  sameSite: prod ? 'none' : 'lax',
+  secure: prod,
+};
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'change-me',
+  resave: false,
+  saveUninitialized: false,
+  cookie: sessionCookieConfig,
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.serializeUser((user, done) => {
+  // store minimal fields in session
+  done(null, user);
+});
+passport.deserializeUser((obj, done) => {
+  done(null, obj);
+});
+
+passport.use(new GoogleStrategy({
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  callbackURL: '/api/auth/google/callback',
+  proxy: true,
+}, (accessToken, refreshToken, profile, done) => {
+  try {
+    const user = {
+      id: profile.id,
+      displayName: profile.displayName,
+      email: Array.isArray(profile.emails) && profile.emails[0] ? profile.emails[0].value : null,
+      photo: Array.isArray(profile.photos) && profile.photos[0] ? profile.photos[0].value : null,
+    };
+    return done(null, user);
+  } catch (e) {
+    return done(e);
+  }
+}));
 
 // Upload YouTube cookies.txt
 // Must be before other routes; accepts raw text
@@ -37,6 +103,47 @@ app.post('/api/upload-cookies', express.text({ type: '*/*', limit: '2mb' }), (re
     console.error('[server] cookies upload error:', e.message);
     res.status(500).json({ error: e.message });
   }
+});
+
+// Auth routes
+app.get('/api/auth/google', (req, res, next) => {
+  const authenticator = passport.authenticate('google', {
+    scope: ['profile', 'email'],
+    prompt: 'select_account',
+  });
+  authenticator(req, res, next);
+});
+
+app.get('/api/auth/google/callback', (req, res, next) => {
+  const FRONTEND_URL = (process.env.NODE_ENV === 'production')
+    ? 'https://youtube-downloader.vercel.app'
+    : 'http://localhost:5173';
+  passport.authenticate('google', {
+    failureRedirect: `${FRONTEND_URL}?login=failed`,
+    session: true,
+  })(req, res, () => {
+    res.redirect(FRONTEND_URL);
+  });
+});
+
+app.get('/api/auth/user', (req, res) => {
+  if (req.isAuthenticated && req.isAuthenticated()) {
+    return res.json({ user: req.user });
+  }
+  res.status(401).json({ user: null });
+});
+
+app.get('/api/auth/logout', (req, res) => {
+  try {
+    if (typeof req.logout === 'function') {
+      // Passport 0.6+ requires callback
+      req.logout(() => {});
+    }
+  } catch (e) {}
+  try {
+    req.session && req.session.destroy && req.session.destroy(() => {});
+  } catch (e) {}
+  res.json({ ok: true });
 });
 
 // Health check endpoint (must be before any static or other routes)

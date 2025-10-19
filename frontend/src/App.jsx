@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+// Ensure cross-site cookies are sent to the API for session auth
+axios.defaults.withCredentials = true
 import { Link, Routes, Route, useLocation } from 'react-router-dom'
 
 function isAudioFmt(fmt) {
@@ -336,6 +338,24 @@ function ContactPage() {
 export default function App() {
   const apiBase = import.meta.env.VITE_API_BASE || 'https://youtube-downloader-app-vh39.onrender.com'
   const location = useLocation()
+  const [user, setUser] = useState(null)
+
+  async function fetchUser() {
+    try {
+      const res = await axios.get(`${apiBase}/api/auth/user`)
+      setUser(res.data.user || null)
+    } catch (_) {
+      setUser(null)
+    }
+  }
+
+  async function logout() {
+    try { await axios.get(`${apiBase}/api/auth/logout`) } catch (_) {}
+    setUser(null)
+  }
+
+  React.useEffect(() => { fetchUser() }, [])
+
   return (
     <div className="flex flex-col min-h-screen">
       <header className="border-b border-primary/20 dark:border-primary/30">
@@ -350,7 +370,24 @@ export default function App() {
               <Link className={`text-sm font-medium hover:text-primary dark:hover:text-primary ${location.pathname==='/about'?'text-primary dark:text-primary':''}`} to="/about">About</Link>
               <Link className={`text-sm font-medium hover:text-primary dark:hover:text-primary ${location.pathname==='/contact'?'text-primary dark:text-primary':''}`} to="/contact">Contact</Link>
             </nav>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
+              {user ? (
+                <div className="flex items-center gap-3">
+                  {user.photo && (
+                    <img src={user.photo} alt={user.displayName || 'User'} className="h-8 w-8 rounded-full border border-slate-300 dark:border-slate-700" />
+                  )}
+                  <span className="text-sm text-slate-700 dark:text-slate-300 truncate max-w-[140px]" title={user.displayName || user.email}>
+                    {user.displayName || user.email}
+                  </span>
+                  <button type="button" onClick={logout} className="text-xs px-3 py-1 rounded bg-primary text-white hover:opacity-90">
+                    Logout
+                  </button>
+                </div>
+              ) : (
+                <a href={`${apiBase}/api/auth/google`} className="text-xs px-3 py-1 rounded bg-primary text-white hover:opacity-90">
+                  Login with Google
+                </a>
+              )}
               <button type="button" aria-label="Help" className="p-2 rounded-full hover:bg-primary/10 dark:hover:bg-primary/20">
                 <span className="material-symbols-outlined text-slate-600 dark:text-slate-400"> help </span>
               </button>

@@ -3,6 +3,7 @@
 architecture_overview:
 - React SPA (frontend) communicates with Express REST API.
 - Express exposes endpoints: /api/download (POST), /api/status/:id (GET), /api/stream/:id (SSE), /api/files (GET), /files/:filename (static), /api/downloads (GET)
+- Auth endpoints: /api/auth/google, /api/auth/google/callback, /api/auth/user, /api/auth/logout (Google OAuth 2.0 via Passport)
 - Downloader worker: Express will enqueue tasks and spawn yt-dlp processes. For MVP the backend may call yt-dlp synchronously for a single request; later move to a worker queue.
 - Storage: downloaded files stored on server filesystem; metadata saved in SQLite.
 
@@ -14,6 +15,7 @@ design_patterns:
 - Use repository pattern for DB access (simple wrappers around sqlite queries).
 - Error handling: capture yt-dlp stderr and status codes and surface to user.
  - SSE broadcasting hub per download id; clients subscribe via EventSource.
+ - Session-based auth (express-session) storing minimal Google profile fields.
 
 scalability_notes:
 - File storage limited by host disk; recommend configurable storage location.

@@ -19,10 +19,12 @@ dependencies / tools:
 - yt-dlp: user or server must install; backend will call it via child_process/spawn
 - sqlite3 or better-sqlite3 Node client
 - WebSocket or SSE for progress streaming (TBD)
+ - Authentication: Passport.js (Google OAuth 2.0) + express-session
 
 security & privacy:
 - No telemetry by default.
 - Sensitive keys stored in `.env` and never checked in. Provide `.env.example`.
+ - Session cookie: SameSite=None; Secure in production; `trust proxy` enabled behind Render.
 
 progress_streaming:
 - Implemented using SSE. Endpoint: `/api/stream/:id`. Frontend uses `EventSource`.
