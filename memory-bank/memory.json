@@ -10,7 +10,7 @@
     "environment":  {
                         "os":  "Windows",
                         "shell":  "PowerShell",
-                        "workspace_path":  "c:\\Users\\reavann\\OneDrive\\Desktop\\YoutubeDownloader",
+                        "workspace_path":  "c:\\Users\\<<REDACTED_NAME>>\\OneDrive\\Desktop\\YoutubeDownloader",
                         "node_version":  "20.x"
                     },
     "preferences":  {
@@ -53,7 +53,7 @@
                              "dropdown_font_fix":  true,
                              "dropdown_theme_darkred":  true,
                              "adsense_enabled":  true,
-                             "adsense_client":  "ca-pub-1483280867963435",
+                             "adsense_client":  "<<REDACTED>>",
                              "last_test":  {
                                                "video_id":  "dQw4w9WgXcQ",
                                                "result":  "completed",
@@ -87,5 +87,11 @@
                                                       "if_backend_changed":  "restart backend and frontend",
                                                       "always":  "both servers must be running for testing"
                                                   }
-                             }
+                             },
+    "redaction_run": {
+        "timestamp": "2025-10-19T22:04:15.0628477Z",
+        "branch": "redact/personal-info-20251019-tokrnq",
+        "status": "unfinished_cancelled",
+        "notes": "Personal/site info redacted and PR created"
+    }
 }

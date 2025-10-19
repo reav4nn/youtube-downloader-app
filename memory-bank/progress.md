@@ -88,8 +88,9 @@ Google SSO updates:
 - Frontend header displays login button, user name + avatar, and logout.
 
 Deployment updates:
-- Frontend domain migrated from `https://youtube-downloader.vercel.app` to `https://youtube-downloader-app-nk79.vercel.app`.
+- Frontend domain migrated from `https://<<REDACTED-FRONTEND>>` to `https://<<REDACTED-FRONTEND>>`.
 - Backend CORS allowed origins and OAuth success redirect updated accordingly.
 
 job_log:
 - UNFINISHED CANCELLED JOB (recorded per user request)
+ - Redaction run completed; personal/site identifiers redacted; job status remains cancelled/unfinished.

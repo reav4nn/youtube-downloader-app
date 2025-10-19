@@ -40,5 +40,5 @@ Env vars for auth:
 - `SESSION_SECRET`
 
 Authorized redirect URIs (set in Google Cloud Console):
-- `https://youtube-downloader-app-vh39.onrender.com/api/auth/google/callback`
+- `https://<<REDACTED-BACKEND>>/api/auth/google/callback`
 - `http://localhost:3000/api/auth/google/callback`

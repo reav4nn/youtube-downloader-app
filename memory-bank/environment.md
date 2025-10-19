@@ -2,7 +2,7 @@
 
 os: Windows (user workspace)
 shell: PowerShell
-workspace_path: c:\Users\reavann\OneDrive\Desktop\YoutubeDownloader
+workspace_path: c:\Users\<<REDACTED_NAME>>\OneDrive\Desktop\YoutubeDownloader
 yt-dlp_installed: true
 node_version: 20.x (npm)
 python_version: TBD (if needed for helper scripts)
@@ -14,4 +14,4 @@ notes:
  - ffmpeg/ffprobe installed and on global PATH (user confirmed).
  - Auth env vars required on backend: `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `SESSION_SECRET`.
  - In production on Render, set `NODE_ENV=production` so session cookie uses `Secure` + `SameSite=None`.
- - CORS with credentials; allowed origins: `https://youtube-downloader-app-nk79.vercel.app`, `http://localhost:5173`.
+ - CORS with credentials; allowed origins: `https://<<REDACTED-FRONTEND>>`, `http://localhost:5173`.

@@ -336,7 +336,7 @@ function ContactPage() {
 }
 
 export default function App() {
-  const apiBase = import.meta.env.VITE_API_BASE || 'https://youtube-downloader-app-vh39.onrender.com'
+  const apiBase = import.meta.env.VITE_API_BASE || 'https://<<REDACTED-BACKEND>>'
   const location = useLocation()
   const [user, setUser] = useState(null)
 
