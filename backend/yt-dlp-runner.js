@@ -31,7 +31,7 @@ function runYtDlp(url, options = {}, onProgress = () => {}, onComplete = () => {
   );
 
   const ytDlpPath =
-    process.env.YT_DLP_PATH || (fs.existsSync(localYt) ? localYt : 'yt-dlp');
+    (fs.existsSync(localYt) ? localYt : (process.env.YT_DLP_PATH || 'yt-dlp'));
 
   // ffmpeg resolve
   const localFfmpeg = path.join(
@@ -41,7 +41,7 @@ function runYtDlp(url, options = {}, onProgress = () => {}, onComplete = () => {
   );
 
   const ffmpegPath =
-    process.env.FFMPEG_LOCATION || localFfmpeg;
+    (fs.existsSync(localFfmpeg) ? localFfmpeg : (process.env.FFMPEG_LOCATION || 'ffmpeg'));
 
   if (ffmpegPath) {
     args.push('--ffmpeg-location', ffmpegPath);
@@ -51,8 +51,8 @@ function runYtDlp(url, options = {}, onProgress = () => {}, onComplete = () => {
   try {
     console.log('[runner] cwd=', process.cwd());
     console.log('[runner] outDir=', outDir);
-    console.log('[runner] ytDlpPath=', ytDlpPath);
-    console.log('[runner] ffmpegPath=', ffmpegPath);
+    console.log('[runner] yt-dlp =', ytDlpPath);
+    console.log('[runner] ffmpeg =', ffmpegPath);
     console.log('[runner] args=', JSON.stringify(args));
   } catch (e) {}
 
