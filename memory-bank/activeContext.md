@@ -1,5 +1,7 @@
 # activeContext
 
+job_status: UNFINISHED CANCELLED JOB
+
 current_focus: Phase 3 – Auth & deployment
 - Real-time progress via SSE is implemented; frontend uses EventSource.
 - Link DB entries to actual downloaded files (filename/filepath) and expose listing.

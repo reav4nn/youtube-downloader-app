@@ -90,3 +90,6 @@ Google SSO updates:
 Deployment updates:
 - Frontend domain migrated from `https://youtube-downloader.vercel.app` to `https://youtube-downloader-app-nk79.vercel.app`.
 - Backend CORS allowed origins and OAuth success redirect updated accordingly.
+
+job_log:
+- UNFINISHED CANCELLED JOB (recorded per user request)
