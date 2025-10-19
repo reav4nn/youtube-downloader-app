@@ -226,6 +226,19 @@ app.get('/api/downloads', (req, res) => {
   }
 });
 
+// Lightweight health and root routes for platform checks
+app.get('/healthz', (req, res) => {
+  res.json({ ok: true });
+});
+
+app.get('/', (req, res) => {
+  res.json({
+    status: 'ok',
+    message: 'VideoDownloader backend API',
+    endpoints: ['/api/download', '/api/downloads', '/api/files', '/api/stream/:id'],
+  });
+});
+
 // Delete a download record and its file (if present)
 app.delete('/api/downloads/:id', (req, res) => {
   const { id } = req.params;

@@ -24,6 +24,7 @@ current_focus: Phase 2 integration work
 - Optimizations: fixed UI text encoding for status messages, cleaned SSE URL usage, added explicit button types, and ensured yt-dlp uses safe filenames via `--restrict-filenames`.
  - Frontend default API base now points to Render deployment; override with `VITE_API_BASE` for local/dev.
  - Frontend `.env` created with `VITE_API_BASE=https://youtube-downloader-app-vh39.onrender.com`; built to `frontend/dist` for Vercel.
+ - Added `vercel.json` at repo root to configure Vercel (Vite static build, output `dist`, `VITE_API_BASE` env). Committed and pushed to origin.
 
 recent_changes:
 - Added SSE endpoint `/api/stream/:id` and wired to backend progress; frontend switched to EventSource.
