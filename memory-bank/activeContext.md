@@ -25,7 +25,7 @@ current_focus: Phase 3 – Auth & deployment
  - AdSense: added Google AdSense script in `frontend/public/index.html` head (client `ca-pub-1483280867963435`).
 - Optimizations: fixed UI text encoding for status messages, cleaned SSE URL usage, added explicit button types, and ensured yt-dlp uses safe filenames via `--restrict-filenames`.
  - Frontend default API base now points to Render deployment; override with `VITE_API_BASE` for local/dev.
- - Frontend `.env` created with `VITE_API_BASE=https://youtube-downloader-app-vh39.onrender.com`; built to `frontend/dist` for Vercel.
+ - Frontend `.env` created with `VITE_API_BASE=https://<<REDACTED-BACKEND>>`; built to `frontend/dist` for Vercel.
 - Added `vercel.json` at repo root to configure Vercel (Vite static build, output `dist`, `VITE_API_BASE` env). Committed and pushed to origin.
  - Backend: added `/healthz` and `/` JSON routes; ensured API routes come before static; added `render.yaml` to define Render build/start (build: cd backend && npm install; start: node backend/server.js). Committed and pushed.
 
@@ -36,7 +36,7 @@ recent_changes:
 - Added forced download endpoint `/files/download/:filename`; frontend now auto-triggers browser download when status becomes `completed`.
  - Updated yt-dlp format selection and added `--merge-output-format` (requires ffmpeg) to avoid corrupted/incomplete files.
  - Implemented Google SSO with Passport.js + express-session. Routes: `/api/auth/google`, `/api/auth/google/callback`, `/api/auth/user`, `/api/auth/logout`. Sessions use SameSite=None; Secure in production with proxy trust; CORS updated for credentials; frontend header shows login, user avatar/name, and logout.
- - Migrated frontend domain to `https://youtube-downloader-app-nk79.vercel.app`; backend CORS allowed origins and OAuth success redirect updated.
+ - Migrated frontend domain to `https://<<REDACTED-FRONTEND>>`; backend CORS allowed origins and OAuth success redirect updated.
 
 next_steps:
 1. Add SSE hardening (heartbeat keepalive, ensure cleanup on disconnect).
