@@ -15,7 +15,7 @@ const app = express();
 app.set('trust proxy', 1);
 
 // CORS with credentials for frontend on Vercel and local dev
-const FRONTEND_ORIGIN = 'https://youtube-downloader.vercel.app';
+const FRONTEND_ORIGIN = 'https://youtube-downloader-app-nk79.vercel.app';
 const allowedOrigins = new Set([
   FRONTEND_ORIGIN,
   'http://localhost:5173',
@@ -116,7 +116,7 @@ app.get('/api/auth/google', (req, res, next) => {
 
 app.get('/api/auth/google/callback', (req, res, next) => {
   const FRONTEND_URL = (process.env.NODE_ENV === 'production')
-    ? 'https://youtube-downloader.vercel.app'
+    ? 'https://youtube-downloader-app-nk79.vercel.app'
     : 'http://localhost:5173';
   passport.authenticate('google', {
     failureRedirect: `${FRONTEND_URL}?login=failed`,

@@ -34,6 +34,7 @@ recent_changes:
 - Added forced download endpoint `/files/download/:filename`; frontend now auto-triggers browser download when status becomes `completed`.
  - Updated yt-dlp format selection and added `--merge-output-format` (requires ffmpeg) to avoid corrupted/incomplete files.
  - Implemented Google SSO with Passport.js + express-session. Routes: `/api/auth/google`, `/api/auth/google/callback`, `/api/auth/user`, `/api/auth/logout`. Sessions use SameSite=None; Secure in production with proxy trust; CORS updated for credentials; frontend header shows login, user avatar/name, and logout.
+ - Migrated frontend domain to `https://youtube-downloader-app-nk79.vercel.app`; backend CORS allowed origins and OAuth success redirect updated.
 
 next_steps:
 1. Add SSE hardening (heartbeat keepalive, ensure cleanup on disconnect).
