@@ -24,7 +24,7 @@ function runYtDlp(url, options = {}, onProgress = () => {}, onComplete = () => {
   args.push(url);
 
   // spawn
-  const ytDlpPath = process.env.YT_DLP_PATH || 'yt-dlp';
+  const localYt = path.join(__dirname, 'bin', process.platform === 'win32' ? 'yt-dlp.exe' : 'yt-dlp');\n  const ytDlpPath = process.env.YT_DLP_PATH || (fs.existsSync(localYt) ? localYt : 'yt-dlp');
   const proc = spawn(ytDlpPath, args);
 
   // ensure output dir exists

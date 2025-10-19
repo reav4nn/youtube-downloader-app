@@ -10,6 +10,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Ensure local bin is in PATH for Render
+try {
+  const binPath = path.resolve(__dirname, 'bin');
+  process.env.PATH = `${binPath}${path.delimiter}${process.env.PATH || ''}`;
+} catch (e) {}
+
 const PORT = process.env.PORT || 3000;
 // Project-local downloads directory only
 const DOWNLOAD_DIR = process.env.DOWNLOAD_PATH || path.resolve(__dirname, '..', 'downloads');

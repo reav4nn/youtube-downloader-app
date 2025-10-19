@@ -58,6 +58,7 @@ Recent updates:
 - Optimizations: fixed UI text encoding for status text, simplified SSE URL, added button types to avoid unintended submits, added yt-dlp `--restrict-filenames` for Windows-safe names.
 - AdSense: inserted script tag into `frontend/public/index.html` head with publisher id.
 - Frontend points to Render API by default via `VITE_API_BASE`; production build generated in `frontend/dist` for Vercel deployment.
+ - Render: added `render.yaml` with build/start commands and added health check routes on backend to avoid "Application Loading"; pushed to GitHub.
  - Added `vercel.json` for Vercel (static build using Vite, output `dist`) and pushed to origin.
 
 Phase 3 – Advanced & deployment:

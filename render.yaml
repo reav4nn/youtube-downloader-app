@@ -2,12 +2,9 @@ services:
   - type: web
     name: youtube-downloader-app-backend
     env: node
-    rootDirectory: .
-    buildCommand: cd backend && npm install
-    startCommand: node backend/server.js
+    rootDirectory: backend
+    buildCommand: npm install
+    startCommand: node server.js
     envVars:
       - key: NODE_VERSION
         value: 20
-      - key: PORT
-        value: 3000
-
