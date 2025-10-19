@@ -245,7 +245,7 @@ app.get('/api/downloads', (req, res) => {
     res.status(500).json({ error: e.message });
   }
 });
-\n// Delete a download record and its file (if present)
+// Delete a download record and its file (if present)
 app.delete('/api/downloads/:id', (req, res) => {
   const { id } = req.params;
   try {
