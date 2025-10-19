@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "frontend/package.json",
+      "use": "@vercel/static-build"
+    }
+  ],
+  "framework": "vite",
+  "outputDirectory": "dist",
+  "env": {
+    "VITE_API_BASE": "https://youtube-downloader-app-vh39.onrender.com"
+  }
+}
+

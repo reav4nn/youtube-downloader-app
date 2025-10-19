@@ -21,7 +21,9 @@ current_focus: Phase 2 integration work
 - Dropdowns refined: select/option/optgroup inherit site font; optgroup labels not italic; dark red hover/focus/border colors applied globally.
 - Removed duplicate navbar on Home; only the main top navigation remains.
  - AdSense: added Google AdSense script in `frontend/public/index.html` head (client `ca-pub-1483280867963435`).
- - Optimizations: fixed UI text encoding for status messages, cleaned SSE URL usage, added explicit button types, and ensured yt-dlp uses safe filenames via `--restrict-filenames`.
+- Optimizations: fixed UI text encoding for status messages, cleaned SSE URL usage, added explicit button types, and ensured yt-dlp uses safe filenames via `--restrict-filenames`.
+ - Frontend default API base now points to Render deployment; override with `VITE_API_BASE` for local/dev.
+ - Frontend `.env` created with `VITE_API_BASE=https://youtube-downloader-app-vh39.onrender.com`; built to `frontend/dist` for Vercel.
 
 recent_changes:
 - Added SSE endpoint `/api/stream/:id` and wired to backend progress; frontend switched to EventSource.
