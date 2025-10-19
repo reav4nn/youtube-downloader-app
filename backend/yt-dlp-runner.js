@@ -1,5 +1,6 @@
 const { spawn } = require('child_process');
 const path = require('path');
+const fs = require('fs');
 
 function runYtDlp(url, options = {}, onProgress = () => {}, onComplete = () => {}, onError = () => {}) {
   const args = [];
@@ -15,21 +16,41 @@ function runYtDlp(url, options = {}, onProgress = () => {}, onComplete = () => {
 
   // output template
   const outDir = path.resolve(process.env.DOWNLOAD_PATH || path.join(__dirname, '..', 'downloads'));
+  if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
   const outTemplate = path.join(outDir, '%(title)s-%(id)s.%(ext)s');
   args.push('-o', outTemplate);
 
   // progress
   args.push('--newline');
 
+  // yt-dlp path resolve
+  const localYt = path.join(
+    __dirname,
+    'bin',
+    process.platform === 'win32' ? 'yt-dlp.exe' : 'yt-dlp'
+  );
+
+  const ytDlpPath =
+    process.env.YT_DLP_PATH || (fs.existsSync(localYt) ? localYt : 'yt-dlp');
+
+  // ffmpeg resolve
+  const localFfmpeg = path.join(
+    __dirname,
+    'bin',
+    process.platform === 'win32' ? 'ffmpeg.exe' : 'ffmpeg'
+  );
+
+  const ffmpegPath =
+    process.env.FFMPEG_LOCATION || localFfmpeg;
+
+  if (ffmpegPath) {
+    args.push('--ffmpeg-location', ffmpegPath);
+  }
+
   args.push(url);
 
   // spawn
-  const localYt = path.join(__dirname, 'bin', process.platform === 'win32' ? 'yt-dlp.exe' : 'yt-dlp');\n  const ytDlpPath = process.env.YT_DLP_PATH || (fs.existsSync(localYt) ? localYt : 'yt-dlp');
   const proc = spawn(ytDlpPath, args);
-
-  // ensure output dir exists
-  const fs = require('fs');
-  if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
 
   proc.stdout.on('data', (data) => {
     const text = data.toString();
