@@ -47,13 +47,30 @@ function runYtDlp(url, options = {}, onProgress = () => {}, onComplete = () => {
     args.push('--ffmpeg-location', ffmpegPath);
   }
 
+  // Log spawn details
+  try {
+    console.log('[runner] cwd=', process.cwd());
+    console.log('[runner] outDir=', outDir);
+    console.log('[runner] ytDlpPath=', ytDlpPath);
+    console.log('[runner] ffmpegPath=', ffmpegPath);
+    console.log('[runner] args=', JSON.stringify(args));
+  } catch (e) {}
+
   args.push(url);
 
   // spawn
-  const proc = spawn(ytDlpPath, args);
+  let proc;
+  try {
+    proc = spawn(ytDlpPath, args, { cwd: process.cwd(), env: process.env });
+  } catch (e) {
+    console.error('[runner] spawn error:', e.message);
+    onError(e);
+    return;
+  }
 
   proc.stdout.on('data', (data) => {
     const text = data.toString();
+    try { console.log('[runner][stdout]', text.trim()); } catch (e) {}
     // try to extract percentage like "[download]   12.3%"
     const m = text.match(/(\d{1,3}\.\d|\d{1,3})%/);
     if (m) {
@@ -64,14 +81,18 @@ function runYtDlp(url, options = {}, onProgress = () => {}, onComplete = () => {
   });
 
   proc.stderr.on('data', (data) => {
-    onProgress({ raw: data.toString() });
+    const msg = data.toString();
+    try { console.log('[runner][stderr]', msg.trim()); } catch (e) {}
+    onProgress({ raw: msg });
   });
 
   proc.on('error', (err) => {
+    console.error('[runner] process error:', err.message);
     onError(err);
   });
 
   proc.on('close', (code) => {
+    console.log('[runner] process closed with code', code);
     if (code === 0) onComplete();
     else onError(new Error('yt-dlp exited with code ' + code));
   });

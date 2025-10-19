@@ -34,6 +34,12 @@ const PORT = process.env.PORT || 3000;
 // Project-local downloads directory only
 const DOWNLOAD_DIR = process.env.DOWNLOAD_PATH || path.resolve(__dirname, '..', 'downloads');
 if (!fs.existsSync(DOWNLOAD_DIR)) fs.mkdirSync(DOWNLOAD_DIR, { recursive: true });
+try {
+  fs.accessSync(DOWNLOAD_DIR, fs.constants.W_OK);
+  console.log(`[server] DOWNLOAD_DIR ready: ${DOWNLOAD_DIR}`);
+} catch (e) {
+  console.error('[server] DOWNLOAD_DIR not writable:', DOWNLOAD_DIR, e.message);
+}
 
 // in-memory progress cache: id -> { percent, status }
 const progressMap = new Map();
@@ -98,6 +104,7 @@ app.post('/api/download', (req, res) => {
 
   const id = uuidv4();
   progressMap.set(id, { percent: 0, status: 'queued' });
+  console.log(`[server] Received download request id=${id} url=${url} format=${format} quality=${quality}`);
 
   // insert metadata into DB
   const audioFormats = new Set(['mp3','m4a','opus']);
@@ -106,6 +113,7 @@ app.post('/api/download', (req, res) => {
   insert.run(id, url, format || null, quality || null, isAudio ? 1 : 0, 'queued');
 
   res.json({ id });
+  console.log(`[server] Queued job id=${id}`);
 
   // enqueue download job
   queue.push((done) => {
@@ -117,6 +125,7 @@ app.post('/api/download', (req, res) => {
         // update progress and broadcast via SSE
         if (p.percent !== undefined) {
           const payload = { percent: p.percent, status: 'downloading' };
+          console.log(`[server] id=${id} progress=${p.percent}%`);
           broadcastProgress(id, payload);
         } else if (p.filename) {
           try {
@@ -124,12 +133,17 @@ app.post('/api/download', (req, res) => {
             const updateMeta = db.prepare('UPDATE downloads SET filename = ?, filepath = ? WHERE id = ?');
             updateMeta.run(base, p.filename, id);
             const payload = { ...(progressMap.get(id) || {}), filename: base };
+            console.log(`[server] id=${id} filename detected=${base}`);
             broadcastProgress(id, payload);
           } catch (e) {
             const payload = { ...(progressMap.get(id) || {}), last: p.raw };
+            console.warn(`[server] id=${id} filename update failed: ${e.message}`);
             broadcastProgress(id, payload);
           }
         } else if (p.raw) {
+          // Log a trimmed line to avoid log flooding
+          const line = String(p.raw).trim();
+          if (line) console.log(`[server] id=${id} yt-dlp: ${line}`);
           const payload = { ...(progressMap.get(id) || {}), last: p.raw };
           broadcastProgress(id, payload);
         }
@@ -137,6 +151,7 @@ app.post('/api/download', (req, res) => {
       (finalPath) => {
         const base = finalPath ? path.basename(finalPath) : (progressMap.get(id)?.filename || null);
         const payload = { percent: 100, status: 'completed', filename: base || undefined };
+        console.log(`[server] id=${id} completed file=${finalPath || base}`);
         broadcastProgress(id, payload);
         const update = db.prepare('UPDATE downloads SET status = ?, filename = COALESCE(?, filename), filepath = COALESCE(?, filepath) WHERE id = ?');
         update.run('completed', base || null, finalPath || null, id);
@@ -144,6 +159,7 @@ app.post('/api/download', (req, res) => {
       },
       (err) => {
         const payload = { percent: 0, status: 'error', error: err.message };
+        console.error(`[server] id=${id} error: ${err.message}`);
         broadcastProgress(id, payload);
         const update = db.prepare('UPDATE downloads SET status = ? WHERE id = ?');
         update.run('error', id);
