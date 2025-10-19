@@ -77,13 +77,33 @@ function runYtDlp(url, options = {}, onProgress = () => {}, onComplete = () => {
     return;
   }
 
+    let lastFilename = null;
   proc.stdout.on('data', (data) => {
     const text = data.toString();
     try { console.log('[runner][stdout]', text.trim()); } catch (e) {}
+    // detect final output filenames
+    const merge = text.match(/Merging formats into\s+\"(.+?)\"/);
+    if (merge && merge[1]) {
+      const pth = merge[1].trim();
+      lastFilename = path.isAbsolute(pth) ? pth : path.join(outDir, pth);
+      onProgress({ raw: text, filename: lastFilename });
+      return;
+    }
+    const dest = text.match(/Destination:\s*(.*)/);
+    if (dest && dest[1]) {
+      const pth = dest[1].trim();
+      lastFilename = path.isAbsolute(pth) ? pth : path.join(outDir, pth);
+      onProgress({ raw: text, filename: lastFilename });
+      return;
+    }
     // try to extract percentage like "[download]   12.3%"
     const m = text.match(/(\d{1,3}\.\d|\d{1,3})%/);
     if (m) {
       onProgress({ percent: parseFloat(m[0]) });
+    } else {
+      onProgress({ raw: text });
+    }
+  });
     } else {
       onProgress({ raw: text });
     }
@@ -100,10 +120,27 @@ function runYtDlp(url, options = {}, onProgress = () => {}, onComplete = () => {
     onError(err);
   });
 
-  proc.on('close', (code) => {
+    proc.on('close', (code) => {
     console.log('[runner] process closed with code', code);
-    if (code === 0) onComplete();
-    else onError(new Error('yt-dlp exited with code ' + code));
+    if (code === 0) {
+      let finalPath = lastFilename;
+      try {
+        if (!finalPath) {
+          const files = fs.readdirSync(outDir).filter(f => /\.(mp4|webm|mkv|mp3|m4a|opus)$/i.test(f));
+          if (files.length) {
+            const withTime = files.map(f => ({ f, t: fs.statSync(path.join(outDir, f)).mtimeMs }));
+            withTime.sort((a,b) => b.t - a.t);
+            finalPath = path.join(outDir, withTime[0].f);
+            console.log('[runner] fallback finalPath =', finalPath);
+          }
+        }
+      } catch (e) {
+        console.warn('[runner] finalPath detection error:', e.message);
+      }
+      onComplete(finalPath);
+    } else {
+      onError(new Error('yt-dlp exited with code ' + code));
+    }
   });
 
   return proc;
