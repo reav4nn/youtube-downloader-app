@@ -5,3 +5,5 @@ backend/node_modules/
 downloads/
 backend/bin/
 backend/cookies.txt
+data/
+frontend/.env
