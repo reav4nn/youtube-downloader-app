@@ -10,6 +10,35 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Upload YouTube cookies.txt
+// Must be before other routes; accepts raw text
+app.post('/api/upload-cookies', express.text({ type: '*/*', limit: '2mb' }), (req, res) => {
+  try {
+    const expected = process.env.COOKIE_UPLOAD_TOKEN;
+    if (expected) {
+      const provided = req.header('X-UPLOAD-TOKEN');
+      if (!provided || provided !== expected) {
+        return res.status(401).json({ error: 'Unauthorized' });
+      }
+    }
+
+    const cookiesPath = path.join(__dirname, 'cookies.txt');
+    const body = typeof req.body === 'string' ? req.body : '';
+    fs.writeFile(cookiesPath, body, { mode: 0o600 }, (err) => {
+      if (err) {
+        console.error('[server] cookies upload write error:', err.message);
+        return res.status(500).json({ error: err.message });
+      }
+      try { fs.chmodSync(cookiesPath, 0o600); } catch (_) {}
+      console.log('[server] cookies uploaded to', cookiesPath, 'bytes=', Buffer.byteLength(body));
+      res.json({ ok: true, path: cookiesPath, bytes: Buffer.byteLength(body) });
+    });
+  } catch (e) {
+    console.error('[server] cookies upload error:', e.message);
+    res.status(500).json({ error: e.message });
+  }
+});
+
 // Health check endpoint (must be before any static or other routes)
 app.get('/api/healthz', (req, res) => {
   res.json({ ok: true });
