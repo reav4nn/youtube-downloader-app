@@ -61,3 +61,5 @@ workflow_preferences:
     default: "start frontend"
     if_backend_changed: "restart backend and frontend"
     always: "both servers must be running for testing"
+
+ - Fixed stray \\\n\ token before DELETE route in backend/server.js that caused a SyntaxError on Render; committed and pushed.

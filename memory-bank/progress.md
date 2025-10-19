@@ -73,3 +73,5 @@ known_issues:
 
 notes:
 - Keep phases visible in `progress.md` and update as work is completed.
+
+ - Fixed SyntaxError in server.js by removing stray \\\n\ token before DELETE route; Render deploy should now start cleanly.
