@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Video Downloader</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#ea2a33",
+              "background-light": "#f8f6f6",
+              "background-dark": "#211111",
+            },
+            fontFamily: {
+              "display": ["Space Grotesk"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      };
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-800 dark:text-slate-200">
+<div class="flex flex-col min-h-screen">
+<header class="border-b border-primary/20 dark:border-primary/30">
+<div class="container mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex h-16 items-center justify-between">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-3xl"> movie </span>
+<h1 class="text-xl font-bold text-slate-900 dark:text-white">VideoDownloader</h1>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-sm font-medium hover:text-primary dark:hover:text-primary" href="#">Home</a>
+<a class="text-sm font-medium hover:text-primary dark:hover:text-primary" href="#">About</a>
+<a class="text-sm font-medium hover:text-primary dark:hover:text-primary" href="#">Contact</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-primary/10 dark:hover:bg-primary/20">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-400"> help </span>
+</button>
+<div class="h-10 w-10 rounded-full bg-cover bg-center" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDU36zlFLhshe_MLuts_0S1cPJ969xeCZNGdS5_PrfWyQ-uRIR2uHJs0mijGp83OJoHKoptR5lSq7b9-k72uMaSh_Ifxq4BytFHNBVTuYlICsE8lRKF5Rkyqfbr5oeJxbK12f0-KxaprrEvIoAHI6m9U-KeCUy0o1fMux89wTmUp0MOPfFDgOn1aYZT30GF1rXb1XVqpXO96KpNjJUkGQP1IUwCTwO916DF1jf3hKN62ItfZXlA7PUmZigUALjzxKOtHw8pFmHs-w");'></div>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+<div class="max-w-xl mx-auto">
+<div class="text-center mb-8">
+<h2 class="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white tracking-tight">Download YouTube Videos Effortlessly</h2>
+<p class="mt-2 text-slate-600 dark:text-slate-400">A simple, fast, and responsive way to get your favorite content.</p>
+</div>
+<div class="space-y-6">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500"> link </span>
+<input class="w-full h-14 pl-12 pr-4 rounded-lg bg-white/50 dark:bg-black/20 border border-slate-300 dark:border-slate-700 focus:ring-2 focus:ring-primary focus:border-transparent transition" placeholder="Paste YouTube Link Here" type="text"/>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+<div>
+<label class="block text-sm font-medium mb-1 text-slate-700 dark:text-slate-300" for="format">Format</label>
+<select class="w-full h-14 rounded-lg bg-white/50 dark:bg-black/20 border border-slate-300 dark:border-slate-700 focus:ring-2 focus:ring-primary focus:border-transparent transition appearance-none pl-4 pr-10 bg-no-repeat bg-right" id="format" style="background-image: url('data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 20 20%27%3e%3cpath stroke=%27%236b7280%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%271.5%27 d=%27M6 8l4 4 4-4%27/%3e%3c/svg%3e');">
+<option>MP4</option>
+<option>WebM</option>
+<option>MOV</option>
+</select>
+</div>
+<div>
+<label class="block text-sm font-medium mb-1 text-slate-700 dark:text-slate-300" for="quality">Quality</label>
+<select class="w-full h-14 rounded-lg bg-white/50 dark:bg-black/20 border border-slate-300 dark:border-slate-700 focus:ring-2 focus:ring-primary focus:border-transparent transition appearance-none pl-4 pr-10 bg-no-repeat bg-right" id="quality" style="background-image: url('data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 20 20%27%3e%3cpath stroke=%27%236b7280%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%271.5%27 d=%27M6 8l4 4 4-4%27/%3e%3c/svg%3e');">
+<option>1080p</option>
+<option>720p</option>
+<option>480p</option>
+</select>
+</div>
+</div>
+<div class="flex items-center">
+<input class="h-4 w-4 rounded border-slate-300 dark:border-slate-600 text-primary focus:ring-primary" id="audio-only" type="checkbox"/>
+<label class="ml-2 block text-sm text-slate-800 dark:text-slate-200" for="audio-only">Extract Audio Only (MP3)</label>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between items-center text-sm">
+<p class="font-medium text-slate-700 dark:text-slate-300">Download Progress</p>
+<p class="text-slate-500 dark:text-slate-400">50%</p>
+</div>
+<div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2.5">
+<div class="bg-primary h-2.5 rounded-full" style="width: 50%"></div>
+</div>
+</div>
+<div class="pt-4">
+<button class="w-full h-12 flex items-center justify-center gap-2 rounded-lg bg-primary text-white font-bold text-sm tracking-wide hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined"> download </span>
+<span>Download</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+</div>
+
+</body></html>

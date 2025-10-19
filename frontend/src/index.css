@@ -1,0 +1,25 @@
+/* Using Tailwind; ensure base font everywhere */
+:root { font-family: 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; }
+
+/* Normalize selects to inherit site font and theme */
+select,
+select option,
+select optgroup,
+option,
+optgroup {
+  font-family: inherit;
+}
+
+/* Optgroup labels not italic */
+optgroup { font-style: normal; }
+
+/* Dark red themed selects (panel styling is OS-dependent; this covers common browsers) */
+select {
+  background-color: #1a0f10;
+  color: #ffffff;
+  border-color: rgba(139,0,0,0.5);
+}
+select:hover { background-color: #2b1517; }
+select:focus { outline: none; box-shadow: 0 0 0 2px rgba(139,0,0,0.75); border-color: #8b0000; }
+option { background-color: #1a0f10; color: #ffffff; }
+optgroup { color: #e5e7eb; }

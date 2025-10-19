@@ -1,0 +1,79 @@
+{
+  "project_name": "VideoDownloader",
+  "stack": {
+    "frontend": "react",
+    "backend": "express",
+    "database": "sqlite",
+    "downloader": "yt-dlp",
+    "ai_model": "gpt-5-mini"
+  },
+  "environment": {
+    "os": "Windows",
+    "shell": "PowerShell",
+    "workspace_path": "c:\\Users\\reavann\\OneDrive\\Desktop\\YoutubeDownloader",
+    "node_version": "20.x"
+  },
+  "preferences": {
+    "default_download_folder": "%USERPROFILE%\\Downloads",
+    "preferred_formats": ["mp4","webm","mov","mp3"],
+    "default_quality": "best",
+    "concurrent_downloads": 1
+  },
+  "yt_dlp_installed": true,
+  "notes": {
+    "auth": "Google SSO deferred to later phase",
+    "pwa": "planned for Phase 3",
+    "self_hosting": true
+  }
+  ,
+  "progress_summary": {
+    "sse_streaming": true,
+    "db_file_linked": true,
+    "downloads_listing": true,
+    "auto_download_on_complete": true,
+    "playable_merge": "mp4 via ffmpeg (bestvideo+bestaudio)",
+    "audio_only_mp3": true,
+    "frontend_downloads_list": true,
+    "delete_downloads": true,
+    "sse_heartbeat": true,
+    "sse_prune_clients": true,
+    "sse_client_store_object": true,
+    "format_quality_selection": true,
+    "unified_format_dropdown": true,
+    "format_drives_mode": true,
+    "downloads_auto_refresh_on_mount": false,
+    "downloads_project_local": true,
+    "recent_downloads_session_scoped": true,
+    "selectors_styled_darkred": true,
+    "navbar_updated": true,
+    "dropdown_font_fix": true,
+    "dropdown_theme_darkred": true,
+    "adsense_enabled": true,
+    "adsense_client": "ca-pub-1483280867963435",
+    "last_test": {
+      "video_id": "dQw4w9WgXcQ",
+      "result": "completed",
+      "file_saved": true
+    }
+  },
+  "requirements": {
+    "ffmpeg": true,
+    "ffmpeg_on_path": true
+  },
+  "endpoints": {
+    "download": "/api/download",
+    "status": "/api/status/:id",
+    "stream": "/api/stream/:id",
+    "downloads": "/api/downloads",
+    "files": "/api/files",
+    "file_static": "/files/:filename"
+  }
+  ,
+  "workflow_preferences": {
+    "run_behavior": {
+      "default": "start frontend",
+      "if_backend_changed": "restart backend and frontend",
+      "always": "both servers must be running for testing"
+    }
+  }
+}
