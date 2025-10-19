@@ -334,7 +334,7 @@ function ContactPage() {
 }
 
 export default function App() {
-  const apiBase = import.meta.env.VITE_API_BASE || 'http://localhost:3000'
+  const apiBase = import.meta.env.VITE_API_BASE || 'https://youtube-downloader-app-vh39.onrender.com'
   const location = useLocation()
   return (
     <div className="flex flex-col min-h-screen">
