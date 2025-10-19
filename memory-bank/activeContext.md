@@ -63,3 +63,4 @@ workflow_preferences:
     always: "both servers must be running for testing"
 
  - Fixed stray \\\n\ token before DELETE route in backend/server.js that caused a SyntaxError on Render; committed and pushed.
+ - Added extensive logging: spawn args/paths/cwd, stdout/stderr piping, completion/error codes; server logs progress, filename detection, SSE, and downloads dir writability.
