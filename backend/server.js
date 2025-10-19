@@ -10,6 +10,20 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Health check endpoint (must be before any static or other routes)
+app.get('/api/healthz', (req, res) => {
+  res.json({ ok: true });
+});
+
+// Root endpoint
+app.get('/', (req, res) => {
+  res.json({
+    status: 'ok',
+    message: 'API is running',
+    endpoints: ['/api/healthz', '/api/downloads']
+  });
+});
+
 // Ensure local bin is in PATH for Render
 try {
   const binPath = path.resolve(__dirname, 'bin');
@@ -231,21 +245,7 @@ app.get('/api/downloads', (req, res) => {
     res.status(500).json({ error: e.message });
   }
 });
-
-// Lightweight health and root routes for platform checks
-app.get('/healthz', (req, res) => {
-  res.json({ ok: true });
-});
-
-app.get('/', (req, res) => {
-  res.json({
-    status: 'ok',
-    message: 'VideoDownloader backend API',
-    endpoints: ['/api/download', '/api/downloads', '/api/files', '/api/stream/:id'],
-  });
-});
-
-// Delete a download record and its file (if present)
+\n// Delete a download record and its file (if present)
 app.delete('/api/downloads/:id', (req, res) => {
   const { id } = req.params;
   try {
