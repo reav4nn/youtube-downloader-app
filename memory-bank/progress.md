@@ -76,4 +76,6 @@ notes:
 
  - Fixed SyntaxError in server.js by removing stray \\\n\ token before DELETE route; Render deploy should now start cleanly.
  - Added detailed backend logging to diagnose Render spawn issues: logs download start, args, cwd, stdout/stderr, close code; verifies downloads dir writability.
- - YouTube cookies support: runner now auto-loads cookies from backend/cookies.txt when present, logs path, and ignores file in git.
+- YouTube cookies support: runner now auto-loads cookies from backend/cookies.txt when present, logs path, and ignores file in git.
+ - Runner syntax fixed; consolidated stdout/stderr/close handling; logs binaries/args; detects final filename reliably and updates DB/API.
+ - Added token-protected cookies upload route and runner auto-detects backend/cookies.txt (--cookies), enabling uploads without SSH on Render.

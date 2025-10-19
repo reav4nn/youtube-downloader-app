@@ -65,3 +65,6 @@ workflow_preferences:
  - Fixed stray \\\n\ token before DELETE route in backend/server.js that caused a SyntaxError on Render; committed and pushed.
  - Added extensive logging: spawn args/paths/cwd, stdout/stderr piping, completion/error codes; server logs progress, filename detection, SSE, and downloads dir writability.
  - Added YouTube cookies support: if backend/cookies.txt exists, runner passes --cookies with absolute path; cookies file ignored in git.
+- Added /api/upload-cookies endpoint (raw text, token-protected via COOKIE_UPLOAD_TOKEN, writes backend/cookies.txt with mode 600).
+- yt-dlp runner: cleaned syntax and handlers; prefers local binaries in `backend/bin`; logs spawn cwd/paths/args; auto-detects cookies; robust final filename detection (Destination/Merging or newest file fallback).
+- Backend now records `filename` and `filepath` on completion and exposes them via `/api/downloads` with `file_url` served from `/files`.
