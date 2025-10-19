@@ -76,3 +76,4 @@ notes:
 
  - Fixed SyntaxError in server.js by removing stray \\\n\ token before DELETE route; Render deploy should now start cleanly.
  - Added detailed backend logging to diagnose Render spawn issues: logs download start, args, cwd, stdout/stderr, close code; verifies downloads dir writability.
+ - YouTube cookies support: runner now auto-loads cookies from backend/cookies.txt when present, logs path, and ignores file in git.

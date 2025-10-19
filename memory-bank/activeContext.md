@@ -64,3 +64,4 @@ workflow_preferences:
 
  - Fixed stray \\\n\ token before DELETE route in backend/server.js that caused a SyntaxError on Render; committed and pushed.
  - Added extensive logging: spawn args/paths/cwd, stdout/stderr piping, completion/error codes; server logs progress, filename detection, SSE, and downloads dir writability.
+ - Added YouTube cookies support: if backend/cookies.txt exists, runner passes --cookies with absolute path; cookies file ignored in git.
