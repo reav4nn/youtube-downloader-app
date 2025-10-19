@@ -4,6 +4,7 @@ const fs = require('fs');
 
 function runYtDlp(url, options = {}, onProgress = () => {}, onComplete = () => {}, onError = () => {}) {
   const args = [];
+
   // assemble basic args
   if (options.audioOnly) {
     args.push('-x', '--audio-format', 'mp3');
@@ -23,29 +24,18 @@ function runYtDlp(url, options = {}, onProgress = () => {}, onComplete = () => {
   // progress
   args.push('--newline');
 
-  // yt-dlp path resolve
-  const localYt = path.join(
-    __dirname,
-    'bin',
-    process.platform === 'win32' ? 'yt-dlp.exe' : 'yt-dlp'
-  );
+  // yt-dlp path resolve (prefer local)
+  const binDir = path.join(__dirname, 'bin');
+  const localYt = path.join(binDir, process.platform === 'win32' ? 'yt-dlp.exe' : 'yt-dlp');
+  const ytDlpPath = fs.existsSync(localYt) ? localYt : (process.env.YT_DLP_PATH || 'yt-dlp');
 
-  const ytDlpPath =
-    (fs.existsSync(localYt) ? localYt : (process.env.YT_DLP_PATH || 'yt-dlp'));
-
-  // ffmpeg resolve
-  const localFfmpeg = path.join(
-    __dirname,
-    'bin',
-    process.platform === 'win32' ? 'ffmpeg.exe' : 'ffmpeg'
-  );
-
-  const ffmpegPath =
-    (fs.existsSync(localFfmpeg) ? localFfmpeg : (process.env.FFMPEG_LOCATION || 'ffmpeg'));
-
+  // ffmpeg resolve (prefer local)
+  const localFfmpeg = path.join(binDir, process.platform === 'win32' ? 'ffmpeg.exe' : 'ffmpeg');
+  const ffmpegPath = fs.existsSync(localFfmpeg) ? localFfmpeg : (process.env.FFMPEG_LOCATION || 'ffmpeg');
   if (ffmpegPath) {
     args.push('--ffmpeg-location', ffmpegPath);
   }
+
   // YouTube cookies support
   try {
     const cookiesPath = path.join(__dirname, 'cookies.txt');
@@ -56,6 +46,7 @@ function runYtDlp(url, options = {}, onProgress = () => {}, onComplete = () => {
   } catch (e) {
     try { console.warn('[runner] cookies detection error:', e.message); } catch (_) {}
   }
+
   // Log spawn details
   try {
     console.log('[runner] cwd=', process.cwd());
@@ -77,11 +68,11 @@ function runYtDlp(url, options = {}, onProgress = () => {}, onComplete = () => {
     return;
   }
 
-    let lastFilename = null;
+  let lastFilename = null;
   proc.stdout.on('data', (data) => {
     const text = data.toString();
     try { console.log('[runner][stdout]', text.trim()); } catch (e) {}
-    // detect final output filenames
+    // detect "Merging formats into \"...\"" lines
     const merge = text.match(/Merging formats into\s+\"(.+?)\"/);
     if (merge && merge[1]) {
       const pth = merge[1].trim();
@@ -89,6 +80,7 @@ function runYtDlp(url, options = {}, onProgress = () => {}, onComplete = () => {
       onProgress({ raw: text, filename: lastFilename });
       return;
     }
+    // detect "Destination: ..." lines
     const dest = text.match(/Destination:\s*(.*)/);
     if (dest && dest[1]) {
       const pth = dest[1].trim();
@@ -100,10 +92,6 @@ function runYtDlp(url, options = {}, onProgress = () => {}, onComplete = () => {
     const m = text.match(/(\d{1,3}\.\d|\d{1,3})%/);
     if (m) {
       onProgress({ percent: parseFloat(m[0]) });
-    } else {
-      onProgress({ raw: text });
-    }
-  });
     } else {
       onProgress({ raw: text });
     }
@@ -120,7 +108,7 @@ function runYtDlp(url, options = {}, onProgress = () => {}, onComplete = () => {
     onError(err);
   });
 
-    proc.on('close', (code) => {
+  proc.on('close', (code) => {
     console.log('[runner] process closed with code', code);
     if (code === 0) {
       let finalPath = lastFilename;
