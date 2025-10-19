@@ -4,3 +4,4 @@ backend/node_modules/
 .env
 data/
 downloads/
+backend/cookies.txt

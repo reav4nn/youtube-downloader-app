@@ -46,7 +46,16 @@ function runYtDlp(url, options = {}, onProgress = () => {}, onComplete = () => {
   if (ffmpegPath) {
     args.push('--ffmpeg-location', ffmpegPath);
   }
-
+  // YouTube cookies support
+  try {
+    const cookiesPath = path.join(__dirname, 'cookies.txt');
+    if (fs.existsSync(cookiesPath)) {
+      args.push('--cookies', cookiesPath);
+      try { console.log('[runner] cookies =', cookiesPath); } catch (e) {}
+    }
+  } catch (e) {
+    try { console.warn('[runner] cookies detection error:', e.message); } catch (_) {}
+  }
   // Log spawn details
   try {
     console.log('[runner] cwd=', process.cwd());
